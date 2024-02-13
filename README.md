@@ -40,5 +40,10 @@ The project simulates an omni wheel mobile robot equipped with sensors for wall 
 
 The simulation environment is self-defined and includes various obstacles and wall configurations to test the robot's wall following algorithm.
 
+# Acknowledgments
+Guidance and support from Mr. Alunkal Ginu Paul and the Deggendorf Institute of Technology faculty.
+
+ROS and Gazebo communities for the extensive documentation and tutorials.
+
 # Contributing
 We welcome contributions! Please submit pull requests or issues on GitHub if you have improvements or suggestions.
