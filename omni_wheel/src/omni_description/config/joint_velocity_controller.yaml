@@ -1,0 +1,33 @@
+omni:
+
+    joint_state_controller:
+        type: joint_state_controller/JointStateController
+        publish_rate: 100
+
+    rim_wheel4_joint:
+        type: velocity_controllers/JointVelocityController
+        joint: rim_wheel4_joint
+        p: 100
+        i: 0.1 
+        d: 0.0
+
+    rim_wheel3_joint:
+        type: velocity_controllers/JointVelocityController
+        joint: rim_wheel3_joint
+        p: 100
+        i: 0.1
+        d: 0.0
+
+    rim_wheel2_joint:
+        type: velocity_controllers/JointVelocityController
+        joint: rim_wheel2_joint
+        p: 100 
+        i: 0.1 
+        d: 0.0
+   
+    rim_wheel1_joint:
+        type: velocity_controllers/JointVelocityController
+        joint: rim_wheel1_joint
+        p: 100 
+        i: 0.1 
+        d: 0.0

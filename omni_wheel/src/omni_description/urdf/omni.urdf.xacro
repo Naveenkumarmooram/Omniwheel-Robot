@@ -1,0 +1,129 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="omni">
+	<xacro:include filename="$(find omni_description)/urdf/rplidar.urdf.xacro"/>
+	<xacro:include filename="$(find omni_description)/urdf/rim.urdf.xacro"/>
+	<link name="base_footprint"/>
+  <material name="white">
+    <color rgba="0 0 0 1"/>
+  </material>
+
+  <link name="base_link">
+    <visual>
+      <geometry>
+        <box size="0.3 0.3 0.03"/>
+    </geometry>
+    <origin rpy = "0 0 0" xyz="0 0 0.04"/>
+      <material name="white"/>
+    </visual>
+    <inertial>
+	  <origin xyz="0.0 0.0 0.04" rpy="0.0 0.0 0.0"/>
+      <mass value="1"/>
+      <inertia
+        ixx="0.04695"
+        ixy="0"
+        ixz="0"
+        iyy="0.04695"
+        iyz="0"
+        izz="0.09385"/>
+      </inertial>
+	  <collision>
+		<geometry>
+			<box size="0.3 0.3 0.03"/>
+		</geometry>
+	  </collision>
+  </link>
+  <joint name="base_joint" type="fixed">
+    <parent link="base_footprint" />
+    <child link="base_link" />
+    <origin xyz="0 0 0"/>
+    <limit effort="100.0" velocity="0.1" lower="-2.61799387799" upper="2.61799387799" />
+</joint>
+
+	
+<xacro:rplidar
+		name="rplidar"
+		xyz="0.0 0.0 0.09"
+		rpy="0.0 0.0 0.0"
+		color="1 0.84 0 1" />
+  <xacro:rim_macro
+		name="wheel4"
+    	color="0.6 0 0"
+		xyz="-0.09 0.18 0.02"
+		rpy="1.570796326794896 0 3.141592653589793"/>
+	<xacro:rim_macro
+		name="wheel3"
+		color="0 0.6 0"
+		xyz="0.1 0.175 0.02"
+		rpy="1.570796326794896 0 3.141592653589793"/>
+	<xacro:rim_macro
+		name="wheel2"
+		color="0.6 0 0"
+		xyz="0.1 -0.175 0.02"
+		rpy="1.570796326794896 0 3.141592653589793"/>
+	<xacro:rim_macro
+		name="wheel1"
+		color="0 0.6 0.0"
+		xyz="-0.09 -0.18 0.02"
+		rpy="1.570796326794896 0 3.141592653589793"/>
+
+
+	<gazebo reference="base_link">
+    		<material>Gazebo/Black</material>
+			<mu1>0.2</mu1>
+			<mu2>0.2</mu2>
+			<kp>500000.0</kp>
+			<kd>10.0</kd>
+			<minDepth>0.001</minDepth>
+			<maxVel>0.5</maxVel>
+			<fdir1>1 0 0</fdir1>
+  	</gazebo>
+
+	<gazebo reference="rim_wheel3_link">
+    		<material>Gazebo/Green</material>
+			<mu1>0.2</mu1>
+			<mu2>0.2</mu2>
+			<kp>500000.0</kp>
+			<kd>10.0</kd>
+			<minDepth>0.001</minDepth>
+			<maxVel>0.5</maxVel>
+			<fdir1>1 0 0</fdir1>
+  	</gazebo>
+
+	<gazebo reference="rim_wheel4_link">
+    		<material>Gazebo/Red</material>
+			<mu1>0.2</mu1>
+			<mu2>0.2</mu2>
+			<kp>500000.0</kp>
+			<kd>10.0</kd>
+			<minDepth>0.001</minDepth>
+			<maxVel>0.5</maxVel>
+			<fdir1>1 0 0</fdir1>
+  	</gazebo>
+
+	<gazebo reference="rim_wheel1_link">
+    		<material>Gazebo/Green</material>
+			<mu1>0.2</mu1>
+			<mu2>0.2</mu2>
+			<kp>500000.0</kp>
+			<kd>10.0</kd>
+			<minDepth>0.001</minDepth>
+			<maxVel>0.5</maxVel>
+			<fdir1>1 0 0</fdir1>
+  	</gazebo>
+  <gazebo reference="rim_wheel2_link">
+    		<material>Gazebo/Red</material>
+			<mu1>0.2</mu1>
+			<mu2>0.2</mu2>
+			<kp>500000.0</kp>
+			<kd>10.0</kd>
+			<minDepth>0.001</minDepth>
+			<maxVel>0.5</maxVel>
+			<fdir1>1 0 0</fdir1>
+  </gazebo>
+	<gazebo>
+    <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+        <robotNamespace>/omni</robotNamespace>
+            </plugin>
+</gazebo>
+
+ </robot>

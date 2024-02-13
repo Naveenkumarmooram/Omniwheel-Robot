@@ -1,0 +1,60 @@
+<launch>
+	<!--arg name="map_file" default="$(find omni_description)/maps/map.yaml"/-->
+	<arg name="open_rviz" default="true"/>
+	<arg name="move_forward_only" default="false"/>
+	<include file="$(find gazebo_ros)/launch/empty_world.launch">
+		<arg name="world_name" value="$(find omni_description)/world/omni_world.world"/>
+		<arg name="paused" value="false"/>
+		<arg name="use_sim_time" value="true"/>
+		<arg name="gui" value="true"/>
+		<arg name="headless" value="false"/>
+		<arg name="debug" value="false"/>	
+	</include>	
+	<param name="robot_description" command="$(find xacro)/xacro '$(find omni_description)/urdf/omni.urdf.xacro'" />
+	<arg name="x" default="0.0" />
+	<arg name="y" default="1.0" />
+	<arg name="z" default="0.0" />
+	<param name="rate" value="10" />
+	<rosparam file="$(find omni_description)/config/joint_velocity.yaml" command="load"/>
+	<rosparam file="$(find omni_description)/config/joint_velocity_controller.yaml" command="load"/> 
+	<param name="/joy_node/dev" type="str" value="/dev/input/js1" />
+    <!-- Nodes -->
+	<node name="joy_node" pkg="joy" type="joy_node"/>
+	<node name="omni_node" pkg="omni_description" type="joy_to_omni.py" />
+	<node name="odom_pub" pkg="omni_description" type="odom_pub.py" />
+    <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" output="screen" args="-urdf -x $(arg x) -y $(arg y) -z $(arg z) -model omni -param robot_description"/>
+	<node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" output="screen" />
+    <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
+    <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false" output="screen" ns="/omni" 
+	args="--namespace=/omni
+	joint_state_controller
+	rim_wheel4_joint
+	rim_wheel3_joint
+	rim_wheel2_joint
+	rim_wheel1_joint
+	"/>
+   <!-- SLAM - Map Building ->
+     <node name="gmapping" pkg="gmapping" type="slam_gmapping" output="screen">
+    <rosparam file="$(find omni_description)/config/gmapping.yaml" command="load"/>
+    </node> -->
+    
+	<!-- Map server! -->
+	<node name="map_server" pkg="map_server" type="map_server" args="$(find omni_description)/maps/map.yaml">
+	<param name="frame_id" value="map"/>
+	</node>"
+
+	<!--AMCL -->
+	<include file="$(find omni_description)/launch/amcl.launch"/>
+
+	<!-- move_base -->
+	 <include file="$(find omni_description)/launch/move_base.launch">
+	</include> 
+
+	<!-- rviz -->
+	<group if="$(arg open_rviz)"> 
+		<node pkg="rviz" type="rviz" name="rviz" required="true"
+			  args="-d $(find omni_description)/omni.rviz"/> 
+	</group> 
+	<!-- <node pkg="teleop_twist_keyboard" name="teleop" type="teleop_twist_keyboard.py" /> -->
+	
+</launch>
